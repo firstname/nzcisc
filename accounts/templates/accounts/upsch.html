@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block guid %}  - 上传创建机构 {% endblock %}
+{% block content %}
+
+        
+    <div class="well">
+        <h1>上传文件创建机构 </h1>
+        <p>&nbsp;</p>
+<!-- 错误提示信息 -->
+    {% if user_is_reged %}
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>错误!</h4>用户无权限
+        </div> {% endif %}
+
+             <p >  <a href="{% url 'downtemplate' pp='company' %}">下载模板</a>   </p>
+
+<!-- 注册表单开始 -->
+        <form class="alert alert-success" action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+            {% csrf_token %}
+            <!-- pp传递的文件名 -->
+
+            <!-- {{ form.as_p }} -->   
+            <table class=""> 
+            {% for field in form %} 
+                <tr>
+                <td>{{ field.label_tag }}</td> <td>{{ field }} </td><td>{{ field.errors }}</td>
+                </tr>
+                <tr><td> &nbsp &nbsp </td></tr>
+            {% endfor %}   
+            </table>  
+               
+            仅支持.xls格式
+            <p class="form-actions">
+                <input type="submit" value="上传" class="btn btn-primary">
+            </p>
+        </form>
+            
+    </div>
+
+{% endblock %}

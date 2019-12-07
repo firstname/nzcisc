@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block guid %}  - 机构一览{% endblock %}
+  {% block title %} 机构列表 {% endblock %} 
+{% block content %}
+
+
+<div class="col-md-12">
+
+                            <ul id="issueTab" class="nav nav-tabs">
+                                <li class="active"><a href="#setsch" data-toggle="tab">添加机构|添加人员 </a></li>
+                                <!-- <li><a href="#inpu" data-toggle="tab">设置 </a></li>-->
+                                <!-- <li><a href={% url 'editissue' %} >设置常用加减分事项 </a></li>-->
+                            </ul>
+
+                     <!-- 选择-->
+                        <div id="issueTabContent" class="tab-content">
+                            <!-- 选择1setsch-->
+                                <div class="tab-pane fade in active" id="setsch">
+
+
+<div class="col-lg-12 ds"> 
+   {% if user.is_superuser %} 
+        <a href="{% url 'addfirstsch'  %}"><button  class="btn btn-info  btn-sm">增加一级机构</button></a> 
+        <a  href="{% url 'impsch' %}"><button class="btn btn-info  btn-sm">批量导入任意级别机构</button></a> 
+        <a  href="{% url 'schdeleteall' %}" ><button class="btn btn-info  btn-sm">删除所有机构(开发期使用,后面会停用,请慎用)</button></a> 
+        <a href="{% url 'userlistall' %}" class="btn btn-danger  btn-xs fa fa-users">查看所有人员</a>
+        <a href="{% url 'userdeleteall' %}" class="btn btn-danger  btn-xs fa fa-trash-o">删除所有人员(开发期使用,后面会停用,请慎用)</a>  <br/>
+  {% endif %} 
+  <h4>机构列表</h4>
+
+
+
+
+
+
+{% for imp in schools%} 
+{% if imp.schlevel == 1 %}<!-- 省级  开始--> 
+    <div class="col-md-6 ds">
+
+
+                      <section class="task-panel tasks-widget">
+{% if  usersch.schlevel == 1 or user.is_superuser %}
+{% if  usersch.schcode  ==  imp.schcode  or user.is_superuser %}
+                        
+                          <div class="panel-body">
+                              <div class="task-content ">
+                                  <ul id="sortable" class="task-list ui-sortable">
+                                      <li class="list-danger">
+                                          <i class="badge bg-important">{{imp.schcode}}</i>
+                                          
+                                          <div class="task-title ">
+                                              <span class="badge bg-important"><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{imp.name}}</h4> </span> 
+                                              <span class="task-title-sp">{{imp.sheng.name}} {{imp.shi.name}} {{imp.qu.name}}</span> 
+                                              <span class="task-title-sp text-danger">注册口令:{{imp.schcode}}</span> 
+                                              <span class="task-title-sp">
+                                                  {% if perms.accounts.cando_admin %}              
+                                                                    {% if  imp.admin_name != ''  %}            
+                                                                        管理员:{{imp.admin.truename}}
+                                                                        <a href="{% url 'chooseadmin' pp=imp.id %}">
+                                                                        换个人
+                                                                        </a>                                               
+                                                                    {% else %}
+                                                                        <a href="{% url 'chooseadmin' pp=imp.id %}">
+                                                                        创建管理员
+                                                                        </a>                                                                   
+                                                                    {% endif %}
+                                                  {% endif %}   
+                                                  </span>         
+                                          </div>
+                                                  {% if perms.accounts.cando_admin  %}
+                                              <div class="pull-right  hidden-phone">  
+        <a href="{% url 'addsch' schid=imp.id %}" ><button class="btn btn-primary  btn-xs fa fa-plus">添加下属机构</button></a> 
+        <!-- <a href="{% url 'schdelete' pp=imp.id %}" ><button class="btn btn-danger  btn-xs fa fa-trash-o">删除本机构</button></a> -->
+                                              </div>
+                                      
+                                          <div class="task-title ">          
+                                              <div class="pull-right  hidden-phone">                              
+        <a href="{% url 'userlistsch' schid=imp.id %}"><button  class="btn btn-success  btn-xs fa fa-user-o">查看员工</button></a>
+        <a href="{% url 'addusersch' schid=imp.id %}"><button  class="btn btn-success  btn-xs fa fa-user-plus">添加员工</button></a> 
+        <a href="{% url 'impuser' schid=imp.id %}"><button  class="btn btn-success  btn-xs fa fa-users">批量添加</button></a> 
+                                              </div>
+                                          </div>
+                                                 {% endif %}
+                                      </li>
+                                  </ul>
+                              </div>
+                                             
+                          </div> 
+{% endif %}
+{% endif %}
+                      </section>           
+                                
+
+
+
+{% for imp2 in schools%}     
+{% if imp2.schlevel == 2 and imp2.upschcode == imp.schcode  %}<!-- 地市级  开始-->   
+    <div class="col-md-12">
+                      <section class="task-panel tasks-widget">
+{% if  usersch.schlevel <= 2 or user.is_superuser %}
+{% if  usersch.schcode  ==  imp.schcode  or   usersch.schcode  ==  imp2.schcode or user.is_superuser %}
+                        
+                          <div class="panel-body">
+                              <div class="task-content">
+                                  <ul id="sortable" class="task-list ui-sortable">
+                                      <li class="list-info">
+                                          <i class="badge bg-info">{{imp2.schcode}}</i>
+                                          
+                                          <div class="task-title">
+                                              <span class="badge bg-info"><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{imp2.name}}</h4> </span> 
+                                              <span class="task-title-sp">{{imp2.sheng.name}} {{imp2.shi.name}} {{imp2.qu.name}}</span> 
+                                              <span class="task-title-sp text-danger">注册口令:{{imp2.schcode}}</span> 
+                                              <span class="task-title-sp">
+                                                  {% if perms.accounts.cando_admin %}              
+                                                                    {% if  imp2.admin_name != ''  %}            
+                                                                        管理员:{{imp2.admin.truename}}
+                                                                        <a href="{% url 'chooseadmin' pp=imp2.id %}">
+                                                                        换个人
+                                                                        </a>                                               
+                                                                    {% else %}
+                                                                        <a href="{% url 'chooseadmin' pp=imp2.id %}">
+                                                                        创建管理员
+                                                                        </a>                                                                   
+                                                                    {% endif %}
+                                                  {% endif %}   
+                                                  </span>         
+                                          </div>
+                                                  {% if perms.accounts.cando_admin  %}
+                                              <div class="pull-right  hidden-phone"> 
+        <a href="{% url 'addsch' schid=imp2.id %}" ><button class="btn btn-primary  btn-xs fa fa-plus">添加下属机构</button></a> 
+        <!-- <a href="{% url 'schdelete' pp=imp.id %}" ><button class="btn btn-danger  btn-xs fa fa-trash-o">删除本机构</button></a> -->
+                                              </div>
+                                      
+                                          <div class="task-title ">          
+                                              <div class="pull-right  hidden-phone">                              
+        <a href="{% url 'userlistsch' schid=imp2.id %}"><button  class="btn btn-success  btn-xs fa fa-user-o">查看员工</button></a>
+        <a href="{% url 'addusersch' schid=imp2.id %}"><button  class="btn btn-success  btn-xs fa fa-user-plus">添加员工</button></a> 
+        <a href="{% url 'impuser' schid=imp2.id %}"><button  class="btn btn-success  btn-xs fa fa-users">批量添加</button></a> 
+                                              </div>
+                                          </div>
+                                                 {% endif %}
+                                      </li>
+                                  </ul>
+                              </div>
+                                             
+                          </div> 
+{% endif %}
+{% endif %}
+                      </section>           
+
+ 
+
+  
+{% for imp3 in schools%}     
+{% if imp3.schlevel == 3 and imp3.upschcode == imp2.schcode  %}<!-- 区县级  开始-->  
+    <div class="col-md-12">
+                      <section class="task-panel tasks-widget">
+{% if  usersch.schlevel <= 3 or user.is_superuser %}
+{% if  usersch.schcode  ==  imp.schcode  or   usersch.schcode  ==  imp2.schcode or     usersch.schcode  ==  imp3.schcode or user.is_superuser %}
+                        
+                          <div class="panel-body">
+                              <div class="task-content">
+                                  <ul id="sortable" class="task-list ui-sortable">
+                                      <li class="list-warning">
+                                          <i class="badge bg-warning">{{imp3.schcode}}</i>
+                                          
+                                          <div class="task-title">
+                                              <span class="badge bg-warning"><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{imp3.name}}</h4> </span> 
+                                              <span class="task-title-sp">{{imp3.sheng.name}} {{imp3.shi.name}} {{imp3.qu.name}}</span> 
+                                              <span class="task-title-sp text-danger">注册口令:{{imp3.schcode}}</span> 
+                                              <span class="task-title-sp">
+                                                  {% if perms.accounts.cando_admin %}              
+                                                                    {% if  imp3.admin_name != ''  %}            
+                                                                        管理员:{{imp3.admin.truename}}
+                                                                        <a href="{% url 'chooseadmin' pp=imp3.id %}">
+                                                                        换个人
+                                                                        </a>                                               
+                                                                    {% else %}
+                                                                        <a href="{% url 'chooseadmin' pp=imp3.id %}">
+                                                                        创建管理员
+                                                                        </a>                                                                   
+                                                                    {% endif %}
+                                                  {% endif %}   
+                                                  </span>         
+                                          </div>
+                                                  {% if perms.accounts.cando_admin  %}
+                                              <div class="pull-right  hidden-phone"> 
+        <a href="{% url 'addsch' schid=imp3.id %}" ><button class="btn btn-primary  btn-xs fa fa-plus">添加下属机构</button></a> 
+        <!-- <a href="{% url 'schdelete' pp=imp.id %}" ><button class="btn btn-danger  btn-xs fa fa-trash-o">删除本机构</button></a> -->
+                                              </div>
+                                      
+                                          <div class="task-title ">          
+                                              <div class="pull-right  hidden-phone">                              
+        <a href="{% url 'userlistsch' schid=imp3.id %}"><button  class="btn btn-success  btn-xs fa fa-user-o">查看员工</button></a>
+        <a href="{% url 'addusersch' schid=imp3.id %}"><button  class="btn btn-success  btn-xs fa fa-user-plus">添加员工</button></a> 
+        <a href="{% url 'impuser' schid=imp3.id %}"><button  class="btn btn-success  btn-xs fa fa-users">批量添加</button></a> 
+                                              </div>
+                                          </div>
+                                                 {% endif %}
+                                      </li>
+                                  </ul>
+                              </div>
+                                             
+                          </div> 
+{% endif %}
+{% endif %}
+                      </section>           
+ 
+{% for imp4 in schools%}     
+{% if imp4.schlevel == 4 and imp4.upschcode == imp3.schcode %}<!-- 小区级  开始-->  
+    <div class="col-md-12">
+                      <section class="task-panel tasks-widget">
+{% if  usersch.schlevel  <= 4 or user.is_superuser %}
+{% if usersch.schcode  ==  imp.schcode  or   usersch.schcode  ==  imp2.schcode or     usersch.schcode  ==  imp3.schcode or       usersch.schcode  ==  imp4.schcode or user.is_superuser %}
+                        
+                          <div class="panel-body">
+                              <div class="task-content">
+                                  <ul id="sortable" class="task-list ui-sortable">
+                                      <li class="list-success">
+                                          <i class="badge bg-success">{{imp4.schcode}}</i>
+                                          
+                                          <div class="task-title">
+                                              <span class="badge bg-success"><h4>&nbsp;&nbsp;&nbsp;&nbsp;{{imp4.name}}</h4> </span> 
+                                              <span class="task-title-sp">{{imp4.sheng.name}} {{imp4.shi.name}} {{imp4.qu.name}}</span> 
+                                              <span class="task-title-sp text-danger">注册口令:{{imp4.schcode}}</span> 
+                                              <span class="task-title-sp">
+                                                  {% if perms.accounts.cando_admin %}              
+                                                                    {% if  imp4.admin_name != ''  %}            
+                                                                        管理员:{{imp4.admin.truename}}
+                                                                        <a href="{% url 'chooseadmin' pp=imp4.id %}">
+                                                                        换个人
+                                                                        </a>                                               
+                                                                    {% else %}
+                                                                        <a href="{% url 'chooseadmin' pp=imp4.id %}">
+                                                                        创建管理员
+                                                                        </a>                                                                   
+                                                                    {% endif %}
+                                                  {% endif %}   
+                                                  </span>         
+                                          </div>
+                                                  {% if perms.accounts.cando_admin  %}
+                                              <div class="pull-right  hidden-phone"> 
+<!-- 小区级不再支持添加下一等级-->
+        <!--<a href="{% url 'addsch' schid=imp4.id %}" ><button class="btn btn-primary  btn-xs fa fa-plus">添加下属机构</button></a> -->
+        <!-- <a href="{% url 'schdelete' pp=imp4.id %}" ><button class="btn btn-danger  btn-xs fa fa-trash-o">删除本机构</button></a> -->
+                                              </div>
+                                      
+                                          <div class="task-title ">          
+                                              <div class="pull-right  hidden-phone">                              
+        <a href="{% url 'userlistsch' schid=imp4.id %}"><button  class="btn btn-success  btn-xs fa fa-user-o">查看员工</button></a>
+        <a href="{% url 'addusersch' schid=imp4.id %}"><button  class="btn btn-success  btn-xs fa fa-user-plus">添加员工</button></a> 
+        <a href="{% url 'impuser' schid=imp4.id %}"><button  class="btn btn-success  btn-xs fa fa-users">批量添加</button></a> 
+                                              </div>
+                                          </div>
+                                                 {% endif %}
+                                      </li>
+                                  </ul>
+                              </div>
+                                             
+                          </div>
+{% endif %}
+{% endif %}
+                      </section>  
+                                                   
+                                                 
+                                                  
+       
+    </div>        
+{% endif %}<!-- 小区级  结束-->
+{% endfor%}<!-- 小区级  结束--> 
+
+
+
+
+ 
+
+    </div>   
+{% endif %}<!-- 区县级  结束-->
+{% endfor%}<!-- 区县级  结束-->
+
+
+
+
+    </div> 
+{% endif %}<!-- 地市级  结束-->
+{% endfor%}<!-- 地市级  结束-->
+
+    </div> 
+{% endif %}<!-- 省级  结束-->
+{% endfor%}
+
+
+
+</div><!-- /col-md-12机构列表-->                    
+                        </div><!-- /选择1setsch-->
+                            
+                                </div > <!-- /选择-->
+</div><!-- /col-md-12-->
+{% endblock %}

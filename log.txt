@@ -1,0 +1,78 @@
+待添加功能：
+老师删除学生时跳出警示框
+发送邮件;
+增加用户的学校、年级和班级属性;限定教师只可以查看本校范围内的学生数据;
+问卷分类;
+作答页面题目数较多的时候分页显示;
+作答结果的异常标注;
+学生登录后默认看到所有已做和未作问卷;
+教师登录后默认看到所有已做结果;
+手机浏览的页面适配;
+
+待测试：
+如果问卷内每个题目的答案备选项不一样多？已测：缺失项会显示为nan;需要改进;
+如果上传的用户名重复，关键字短缺失？已测：重名会提示，无法成功;其它网页报错：'float' object has no attribute 'strip';待改进，如果有空缺或者格式错误，报错，阻止上传保存;
+
+
+20170522
+当前版本主要功能：
+questionare：
+1.上传xls创建问卷;预览时还是以xls格式保存在服务器上，只有发布为问卷，才存进数据库;
+2.每个问卷允许每个用户作答duo次;作答时一次性读取全部题目;作答记录保存进数据库;
+user：
+1.角色分为超级管理员、学生和教师;
+2.管理员和教师可以单个或上传xls批量新增学生角色用户;只允许单个新增教师角色;
+
+
+static文件夹在accounts内;
+运行需求：
+python3.4/3.5+django1.8
+安装pandas,还要安装xlrd、xlwt以进行excel读写
+(myvenv) 08:17 ~/mindbook (master)$ pip install pandas
+Collecting pandas
+  Downloading pandas-0.20.2-cp35-cp35m-manylinux1_x86_64.whl (24.0MB)
+    100% |████████████████████████████████| 24.0MB 21kB/s 
+Collecting pytz>=2011k (from pandas)
+  Using cached pytz-2017.2-py2.py3-none-any.whl
+Collecting numpy>=1.7.0 (from pandas)
+  Downloading numpy-1.13.0-cp35-cp35m-manylinux1_x86_64.whl (16.9MB)
+    100% |████████████████████████████████| 16.9MB 53kB/s 
+Collecting python-dateutil>=2 (from pandas)
+  Using cached python_dateutil-2.6.0-py2.py3-none-any.whl
+Collecting six>=1.5 (from python-dateutil>=2->pandas)
+Installing collected packages: pytz, numpy, six, python-dateutil, pandas
+
+
+(myvenv) 08:22 ~/mindbook (master)$ pip install xlrd
+Collecting xlrd
+Installing collected packages: xlrd
+Successfully installed xlrd-1.0.0
+(myvenv) 08:22 ~/mindbook (master)$ pip install xlwt
+Collecting xlwt
+  Downloading xlwt-1.2.0-py2.py3-none-any.whl (99kB)
+    100% |████████████████████████████████| 102kB 1.7MB/s 
+Installing collected packages: xlwt
+Successfully installed xlwt-1.2.0
+
+
+
+（6）教师再创建用户时，默认所有被导入或创建的用户都是教师所属学校的。年级和班级信息则在导入的用户文件内创建。
+3.添加班级信息管理;
+
+
+2017.05.24-----------------------修改内容如下 
+2.添加学校管理员;
+（3）由系统管理员为学校创建管理员（第一位教师）;
+（4）由系统管理员导入，
+3.系统管理员可以一键删除所有用户（除系统管理员外）、删除所有学校（危险功能，方便测试用）;
+（5）老师可以单个删除学生。
+
+4.调整userlist的编号为序号，实际id编号只有superuser能见;
+
+
+
+2017.05.22-----------------------修改内容如下
+1.添加学校信息管理;
+（1）由系统管理员在页面逐条添加学校;
+（2）由系统管理员导入，文件内包含省份、地市、县区和学校后，导入，则自动生成系统内还没有的学校。
+

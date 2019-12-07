@@ -1,469 +1,150 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>EDAS</title>
-<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
-<link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet" media="all">
-<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="all">
-<!-- Custom Theme files -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="EDAS,Score analysis,Exam Data Analysis System,The fantastic solutin for score analysis" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- //Custom Theme files -->
-<!-- js -->
-<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
-<script src="{% static 'js/modernizr.custom.js' %}"></script>
-<!-- //js -->   
-<!-- start-smoth-scrolling-->
-<script type="text/javascript" src="{% static 'js/move-top.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>  
-<script type="text/javascript">
-        jQuery(document).ready(function($) {
-            $(".scroll").click(function(event){     
-                event.preventDefault();
-                $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-            });
-        });
-</script>
-<!--//end-smoth-scrolling-->
-<!--animate-->
-<link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css" media="all">
-<script src="{% static 'js/wow.min.js' %}"></script>
-    <script>
-         new WOW().init();
-    </script>
-<!--//end-animate-->
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block guid %}   {% endblock %}
+  {% block title %} index {% endblock %} 
+{% block content %}
 
 
-
-
-
-
-    <!--banner -->
-     <div class="banner02">        
-    <!-- header -->
-        <div class="banner-text02">
-             <div class="logo">  
-                <a href="/"><img src="{% static 'images/icon2.png' %}" alt=""/><h1>EDAS</h1></a>
-             </div>  
-            <div class="top-nav">
-            <ul class="nav1 cl-effect-1">
-                <li><a href="/">Home</a></li> 
-                <li><a href="/#about" class="scroll">Guidance</a></li>
-                <li><a href="/#services" class="scroll">Templates</a></li>
-                <li><a href="/#products" class="scroll">Products</a></li>
-                <li><a href="/#team" class="scroll">About</a></li>
-                <li><a href="/#contact" class="scroll">Contact</a></li>
-                <li><a href="/list/">>> Start >></a></li>
-            </ul>
-            </div>
-        </div>
-            <!-- banner Slider starts Here -->
-        <script src="{% static 'js/responsiveslides.min.js' %}"></script>
-        <script>
-            // You can also use "$(window).load(function() {"
-                $(function () {
-                // Slideshow 3
-                    $("#slider3").responsiveSlides({
-                    auto: true,
-                    pager:false,
-                    nav:true,
-                    speed: 500,
-                    namespace: "callbacks",
-                    before: function () {
-                    $('.events').append("<li>before event fired.</li>");
-                    },
-                    after: function () {
-                        $('.events').append("<li>after event fired.</li>");
-                    }
-                }); 
-            });
-        </script>
-        <!--//End-slider-script -->
-        <div  id="top" class="callbacks_container_big">
-            <ul class="rslides" id="slider3">
-                <li>                    
-                    <div class="banner2_big">                       
+            <section class="scrollable padder">
+              <div class="m-b-md">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h3 class="m-b-none">信息汇总</h3>
+                    <small> </small>
+                  </div>
+                </div>
+              </div>
+              <section class="panel panel-default">
+                <header class="panel-heading font-bold">{{request.user.xiao_name}}</header>
+                <div class="panel-body">
+                  <div class="row text-center no-gutter">
+                    <div class="col-xs-3 b-r b-light">
+                      <p class="h3 font-bold m-t">{{scores.count}}</p>
+                      <p class="text-muted">记分</p>
                     </div>
-                </li>
-                <li>                    
-                    <div class="banner1_big">                       
+                    <div class="col-xs-3 b-r b-light">
+                      <p class="h3 font-bold m-t">{{issues.count}}</p>
+                      <p class="text-muted">事件</p>
                     </div>
-                </li>                               
-            </ul>
-        </div>
+                    <div class="col-xs-3 b-r b-light">
+                      <p class="h3 font-bold m-t">{{employee.count}}</p>
+                      <p class="text-muted">员工</p>
+                    </div>
+                    <div class="col-xs-3">
+                      <p class="h3 font-bold m-t">{{schs.count}}</p>
+                      <p class="text-muted">机构</p>                        
+                    </div>
+                  </div>
+                </div>
+                <footer class="panel-footer bg-white">
+                  <div id="flot-1ine" style="height:5px"> <small></small></div>
+                </footer>
+              </section>
+              
+
+              <div class="row">
+                <div class="col-lg-3" id="accordion">
+                  <section class="panel panel-default">
+                    <header class="panel-heading">
+        <a data-toggle="collapse" data-parent="#accordion"     href="#collapseOne">
+                      最新记分
+        </a>
+                    </header>
+    <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body ">
+                      <div class="text-xs">
+                      {% for sc in scores%}
+                        {% if forloop.counter < 6 %}
+                        <i class="fa fa-circle text-info"></i> {{sc.employee.truename}} {{sc.issue}} {{sc.scoretype}}{{sc.score}}<br/>
+                        {% endif %}
+                      {% endfor %}
+                      </div>                        
+                    </div>
     </div>
-    <!--//banner-->
-
-<!--about-->
-    <div class="about" id="about">
-        <div class="container">
-            <div class="title">
-                <h3>User Guide</h3>
-                <p>This system can analysis scores of eaxm or questinare. And it's very easy to use. </p>
-            </div>
-            <div class="about-grids2">
-                <div class="col-md-8 about-info  wow fadeInRight animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
-                    <!-- <img src="{% static 'images/img1.jpg' %}" alt=""/> -->
-                    <h4>Before use </h4>
-                    <p>You need to know your purpose, it's to say, what you want to get through analysis, and it will be better if you know  exactly some tables or charts you want. And these decide what kind of data you will input. Often seen file types are as blow:</p>
-                    <ul>
-                        <li><a href="#services">Exam score data file</a></li>
-                        <!-- <li><a href="//">Questionare choice data file</a></li> -->
-                        <li><a href="#services">File about participants</a></li>
-                        <li><a href="#services">File about test items</a></li>
-                    </ul>
-                </div>               
-                <div class="col-md-8 about-info  wow fadeInLeft animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
-                    <h4>How to use </h4>
-                    <p>What you need to do is so easy, only THREE steps: Choose or upload data file >> Define groups or labels of your data >> Computer run and you'll see the result. And all the computational job is done by computer,what you would do is less. Come on, just do it!</p>
-                    <ul>
-                        <li><a href="/up/">Upload file in cooresponding format.</a></li>
-                        <!-- <li><a href="//">Choose tables or charts would be output</a></li> -->
-                        <li><a href="/group/">Define groups or labels of data</a></li>
-                        <li><a href="/list/">Check and download the results</a></li>
-                    </ul>
-                </div>
-                <div class="clearfix"> </div>
-            </div>
-        </div>
+                    <div class="panel-footer">
+        <a data-toggle="collapse" data-parent="#accordion" 
+           href="#collapseTwo">
+                    全部记分
+        </a>
+                    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+                      <div class="panel-body">
+                      <div class="text-xs">
+                      {% for sc in scores%}
+                        <i class="fa fa-circle text-info"></i> {{sc.employee.truename}} {{sc.issue}} {{sc.scoretype}}{{sc.score}}<br/>
+                      {% endfor %}
+                      </div>
     </div>
-    <!--//about-->
-    
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-
-    <!--services-->
-    <div class="services" id="services">
-        <div class="container">         
-            <div class="title">
-                <h3>File Templates</h3>
-                <p>First of all, make sure of your purpose. Then choose the right file format and download the template, input all your data as exactly in the templates. </p>
-            </div>
-            <div class="service-grids2">
-                <div class="col-md-8 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <div class="srvc-img">
-                        <img src="{% static 'images/icon2.png' %}" alt=""/>
-                    </div>
-                    <h5>Exam score</h5>
-                    <p>This is the most often seen data files that include scores of students. </p>
-                    <div class="col-md-12 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                        <figure class="effect-bubba">
-                        <img src="{% static 'images/score.png' %}" alt=""/>
-                        <figcaption>
-                            <h4><a href="{% url 'down' p1='score'  %}">Download the template</a></h4>
-                            <p>Includes info about scores</p>  
-                        </figcaption>           
-                        </figure>       
-                    </div>
+                    <div class="panel-footer"><small>导出数据</small></div>
+                  </section>
                 </div>
-      
-                <div class="col-md-8 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <div class="srvc-img">
-                        <img src="{% static 'images/icon4.png' %}" alt=""/>
-                    </div>
-                    <h5>Participants</h5>
-                    <p>These info can be helpful if you want the results are related with the participants.  </p>
-                    <div class="col-md-12 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                        <figure class="effect-bubba">
-                        <img src="{% static 'images/participant.png' %}" alt=""/>
-                        <figcaption>
-                            <h4><a href="{% url 'down' p1='participant'  %}">Download the template</a></h4>
-                            <p>Includes info about participants</p>  
-                        </figcaption>           
-                        </figure>       
-                    </div>
-                </div>
-                <div class="col-md-8 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <div class="srvc-img">
-                        <img src="{% static 'images/icon6.png' %}" alt=""/>
-                    </div>
-                    <h5>Items</h5>
-                    <p>These info can be helpful if you want to do analysis about exam items. </p>
-                    <div class="col-md-12 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                        <figure class="effect-bubba">
-                        <img src="{% static 'images/item.png' %}" alt=""/>
-                        <figcaption>
-                            <h4><a href="{% url 'down' p1='item'  %}">Download the template</a></h4>
-                            <p>Includes info about items</p>  
-                        </figcaption>           
-                        </figure>       
-                    </div>
-                </div>
-               
-                <div class="clearfix"> </div>               
-            </div>
-        </div>
-    </div>
-    <!--//services-->
-
-    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-
-    <div class="slid">
-        <div class="container">
-            <div class="wow fadeInRight animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                <h3>A wonderful designs has takenpossession but also the leap into educational data presenting </h3>
-            </div>
-        </div>
-    </div>  
-    <!--products-->
-    <div class="features" id="products">
-        <div class="container">         
-            <div class="title">
-                <h3>Our Products</h3>
-                <p>A wonderful designs has takenpossession but also the leap into electronic pesetting industry  It was popularised in the 1960s with the release </p>
-            </div>
-            <div class="features-info">
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img2.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>           
-                    </figure>       
-                </div>
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img7.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>       
-                    </figure>       
-                </div>
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img4.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>           
-                    </figure>       
-                </div>
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img5.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>           
-                    </figure>       
-                </div>
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img6.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>           
-                    </figure>       
-                </div>
-                <div class="col-md-4 features-grids wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
-                    <figure class="effect-bubba">
-                        <img src="{% static 'images/img3.jpg' %}" alt=""/>
-                        <figcaption>
-                            <h4>Enimet pulvinar posuere</h4>
-                            <p>In sit amet sapien eros Integer dolore magna aliqua</p>  
-                        </figcaption>       
-                    </figure>       
-                </div>
-                <div class="clearfix"> </div>
-            </div>
-        </div>
-    </div>
-    <!--//products-->
-    <!--team-->
-    <div class="team" id="team">
-        <div class="container">
-            <div class="title">
-                <h3>Meet Our Team</h3>
-                <p>A wonderful designs has takenpossession but also the leap into electronic pesetting industry  It was popularised in the 1960s with the release </p>
-            </div>
-            <!-- flex-slider -->
-            <div class="work-bottom">
-                <div class="nbs-flexisel-container"><div class="nbs-flexisel-inner"><ul id="flexiselDemo1" class="nbs-flexisel-ul" style="left: -285px; display: block;">                                                                                                                                       
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img8.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>MARK SIMMY</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img9.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>MARK SIMMY</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img10.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>ALAN SMITH</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img11.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>CAROL ADAMS</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img12.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>MARK SIMMY</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img13.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>MARK SIMMY</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img14.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>ALAN SMITH</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nbs-flexisel-item" style="width: 285px;">
-                        <div class="team-left">
-                            <img src="{% static 'images/img15.jpg' %}" alt="">
-                            <div class="team-bottom">
-                                <h4>CAROL ADAMS</h4>
-                                <p>Fusce et nibh eget odio cursus consectetur</p>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="nbs-flexisel-nav-left" style="top: 138px;"></div><div class="nbs-flexisel-nav-right" style="top: 138px;"></div></div></div>
-                    <script type="text/javascript">
-                            $(window).load(function() {
-                                $("#flexiselDemo1").flexisel({
-                                    visibleItems: 4,
-                                    animationSpeed: 1000,
-                                    autoPlay: true,
-                                    autoPlaySpeed: 3000,            
-                                    pauseOnHover: true,
-                                    enableResponsiveBreakpoints: true,
-                                    responsiveBreakpoints: { 
-                                        portrait: { 
-                                            changePoint:480,
-                                            visibleItems: 2
-                                        }, 
-                                        landscape: { 
-                                            changePoint:640,
-                                            visibleItems: 3
-                                        },
-                                        tablet: { 
-                                            changePoint:768,
-                                            visibleItems: 3
-                                        }
-                                    }
-                                });
-                                
-                            });
-                    </script>
-                    <script type="text/javascript" src="{% static 'js/jquery.flexisel.js' %}"></script>             
-                    <!-- //flex-slider -->  
-            </div>
-        </div>
-    </div>  
-    <!--//team-->
-    <!--contact-->
-    <div class="contact" id="contact">
-        <div class="container">
-            <div class="title">
-                <h3>Contact Us</h3>
-                <p>A wonderful designs has takenpossession but also the leap into electronic pesetting industry  It was popularised in the 1960s with the release </p>
-            </div>
-            <div class="contact-grids">
-                <div class="col-md-4 address wow fadeInLeft animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
-                    <h4>Contact info</h4>
-                    <p class="cnt-p">Lorem ipsum dolor sit amet, consectetur adipisicing elit,sheets containing Lorem Ipsum passages sed do </p>
-                    <p>Eiusmod Tempor inc</p>
-                    <p>9560 St Dolor,London</p>
-                    <p>Telephone : +2 800 544 6035</p>
-                    <p>FAX : +1 800 889 4444</p>
-                    <p>Email : <a href="mailto:example@mail.com">mail@example.com</a></p>
-                </div>
-                <div class="col-md-8 contact-form wow fadeInRight animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
-                    <h4>Contact form</h4>
-                    <form>
-                        <div class="col-md-6 contact-form-info">
-                            <input type="text" value="Name" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Name';}" required="">
-                            <input type="email" value="Email" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Email';}" required="">
-                            <input type="text" value="Telephone" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Telephone';}" required="">
-                        </div>
-                        <div class="col-md-6 contact-form-info">
-                            <textarea type="text" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Message...';}" required="">Message...</textarea>                          
-                        </div>
-                        <div class="clearfix"> </div>
-                        <input type="submit" value="Submit">
-                    </form>
-                </div>
-                <div class="clearfix"> </div>   
-            </div>
-        </div>
-        <div class="map">
-            <iframe src="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D%E9%A6%99%E6%B8%AF%E5%B0%96%E6%B2%99%E5%92%80%E7%9A%87%E6%82%A6%E9%85%92%E5%BA%97"></iframe>
-        </div>
-    </div>
-    <!--//contact-->
 
 
-    <!--footer-->
-    <div class="footer">
-        <div class="container">         
-                <p class="wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">Copyright &copy; 2015.<a href="http://127.0.0.1:8000/" target="_blank" title="EDAS">EDAS</a> -  All rights reserved. </p>
-            <div class="clearfix"> </div>
-        </div>  
-    </div>
-    <!--//footer-->
-    <!--smooth-scrolling-of-move-up-->
-    <script type="text/javascript">
-            $(document).ready(function() {
-                /*
-                var defaults = {
-                    containerID: 'toTop', // fading element id
-                    containerHoverID: 'toTopHover', // fading element hover id
-                    scrollSpeed: 1200,
-                    easingType: 'linear' 
-                };
-                */
-                
-                $().UItoTop({ easingType: 'easeOutQuart' });
-                
-            });
-        </script>
-        <a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-    <!--//smooth-scrolling-of-move-up-->
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'js/bootstrap.js' %}"> </script>
-</body>
-</html>
+
+                <div class="col-lg-3">
+                  <section class="panel panel-default">
+                    <header class="panel-heading">
+                      高分员工
+                    </header>
+                    <div class="panel-body text-center">
+                      <div class="text-xs">
+                      {% for im in employee%}
+                        {% if forloop.counter < 6 %}
+                        <i class="fa fa-circle text-info"></i> {{im.truename}} {{im.scores}}<br/>
+                        {% endif %}
+                       {% endfor %}
+                      </div>                  
+                    </div>
+                    <div class="panel-footer"><small>导出数据</small></div>
+                  </section>
+                </div>
+
+
+
+                <div class="col-lg-3">
+                  <section class="panel panel-default">
+                    <header class="panel-heading">
+                      计分次数多员工
+                    </header>
+                    <div class="panel-body text-center">
+                      <div class="text-xs">
+                      {% for ims in employeescore%}
+                        {% if forloop.counter < 6 %}
+                        <i class="fa fa-circle text-info"></i> {{ims.truename}} {{ims.times}}<br/>
+                        {% endif %}
+                       {% endfor %}
+                      </div>                  
+                    </div>
+                    <div class="panel-footer"><small>导出数据</small></div>
+                  </section>
+                </div>
+
+
+
+                <div class="col-lg-3">
+                  <section class="panel panel-default">
+                    <header class="panel-heading">
+                      常用事件
+                    </header>
+                    <div class="panel-body text-center">
+                      <div class="text-xs">
+                      {% for ius in issues%}
+                        {% if forloop.counter < 6 %}
+                        <i class="fa fa-circle text-info"></i> {{ius.issue}} {{ius.times}}<br/>
+                        {% endif %}
+                       {% endfor %}
+                      </div>                  
+                    </div>
+                    <div class="panel-footer"><small>导出数据</small></div>
+                  </section>
+                </div>
+
+
+
+
+              </div>
+            </section>
+
+
+
+{% endblock %} 

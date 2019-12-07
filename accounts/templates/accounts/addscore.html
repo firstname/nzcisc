@@ -1,0 +1,550 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}
+<!-- Custom styles for wizard  -->
+  
+{% endblock %}
+        {% block headjs %}
+  <!--  Plugin for the Wizard -->
+ <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <style type="text/css">
+       .search
+        {
+            left: 0;
+            position: relative;
+        }
+        #auto_div
+        {
+            display: none;
+            position: absolute;
+            width: 160px;
+            border: 1px #74c0f9 solid;
+            background: #FFF;
+            z-index:2;
+            top: 45px;
+            left: 15px;
+            color: #323232;
+        }
+        #auto_div2
+        {
+            display: none;
+            position: absolute;
+            width: 160px;
+            border: 1px #74c0f9 solid;
+            background: #FFF;
+            z-index:2;
+            top: 45px;
+            left: 15px;
+            color: #323232;
+        }
+    </style>
+
+    <script type="text/javascript">
+        //测试用的数据
+        var test_list = {{emplist|safe}};
+        var test_list2 = {{isslist|safe}};
+        var old_value = "";
+        var highlightindex = -1;   //高亮
+        //自动完成
+        function AutoComplete(auto, search, mylist, old_value) {
+            if ($("#" + search).val() != old_value || old_value == "") {
+                var autoNode = $("#" + auto);   //缓存对象（弹出框）
+                var carlist = new Array();
+                var n = 0;
+                old_value = $("#" + search).val();
+                for (i in mylist) {
+                    if (mylist[i].indexOf(old_value) >= 0) {
+                        carlist[n++] = mylist[i];
+                    }
+                }
+                if (carlist.length == 0) {
+                    autoNode.hide();
+                    return;
+                }
+                autoNode.empty();  //清空上次的记录
+                for (i in carlist) {
+                    var wordNode = carlist[i];   //弹出框里的每一条内容
+                    var newDivNode = $("<div>").attr("id", i);    //设置每个节点的id值
+                    newDivNode.attr("style", "font:14px/25px arial;height:25px;padding:0 8px;cursor: pointer;");
+                    newDivNode.html(wordNode).appendTo(autoNode);  //追加到弹出框
+                    //鼠标移入高亮，移开不高亮
+                    newDivNode.mouseover(function () {
+                        if (highlightindex != -1) {        //原来高亮的节点要取消高亮（是-1就不需要了）
+                            autoNode.children("div").eq(highlightindex).css("background-color", "white");
+                        }
+                        //记录新的高亮节点索引
+                        highlightindex = $(this).attr("id");
+                        $(this).css("background-color", "#ebebeb");
+                    });
+                    newDivNode.mouseout(function () {
+                        $(this).css("background-color", "white");
+                    });
+                    //鼠标点击文字上屏
+                    newDivNode.click(function () {
+                        //取出高亮节点的文本内容
+                        var comText = autoNode.hide().children("div").eq(highlightindex).text();
+                        highlightindex = -1;
+                        //文本框中的内容变成高亮节点的内容
+                        $("#" + search).val(comText);
+                    })
+                    if (carlist.length > 0) {    //如果返回值有内容就显示出来
+                        autoNode.show();
+                    } else {               //服务器端无内容返回 那么隐藏弹出框
+                        autoNode.hide();
+                        //弹出框隐藏的同时，高亮节点索引值也变成-1
+                        highlightindex = -1;
+                    }
+                }
+            }
+            //点击页面隐藏自动补全提示框
+            document.onclick = function (e) {
+                var e = e ? e : window.event;
+                var tar = e.srcElement || e.target;
+                if (tar.id != search) {
+                    if ($("#" + auto).is(":visible")) {
+                        $("#" + auto).css("display", "none")
+                    }
+                }
+            }
+        }
+        $(function () {
+            old_value = $("#search_text").val();
+            $("#search_text").focus(function () {
+                if ($("#search_text").val() == "") {
+                    AutoComplete("auto_div", "search_text", test_list, old_value);
+                }
+            });
+            $("#search_text").keyup(function () {
+                AutoComplete("auto_div", "search_text", test_list, old_value);
+            });
+        });
+        $(function () {
+            old_value2 = $("#search_text2").val();
+            $("#search_text2").focus(function () {
+                if ($("#search_text2").val() == "") {
+                    AutoComplete("auto_div2", "search_text2", test_list2, old_value2);
+                }
+            });
+            $("#search_text2").keyup(function () {
+                AutoComplete("auto_div2", "search_text2", test_list2, old_value2);
+            });
+        });
+    </script>
+
+
+        {% endblock %}
+{% block title %} 
+记分
+{% endblock %} 
+{% block guid %} 
+<a href="{% url 'addscore' %}">
+            <i class="fa fa-fw fa-lg fa-pencil "></i> 
+            <span>记分</span>
+          </a>
+{% endblock %}
+{% block content %}
+
+<form action="" method="POST">
+{% csrf_token %}  
+<div  class="col-lg-9 ds">
+
+      <!-- **********************************************************************************************************************************************************
+      员工
+      *********************************************************************************************************************************************************** -->
+
+ 
+                        <div class="col-lg-12 ml-auto mr-auto">
+                            <h3>员工 </h3>
+                                    <div class="tab-content ">
+
+                                        <!--  方式11 input下拉框选择选择的方式  选择员工 -->
+                                        <div id="11 ">
+                                              <div class="col-lg-2"><label class="control-label"></br>输入员工姓名</br></label>
+                                              </div>
+                                              <div class="col-lg-10">
+                                                  </br>
+                                                  <input type="text" id="search_text" name="empname" />
+                                                  <div id="auto_div">
+                                                  </div>
+                                              </div>
+                                        </div><!--   /11 -->
+
+                                        <div id="12 ">
+                                              <div class="col-lg-2"><label class="control-label"></br>或者选择</br></label>
+                                              </div>
+                                              <div class="col-lg-10">
+                                                 {% for imp in employee%} 
+                                                  <!-- 方式12 radio选择的方式  选择员工 -->
+                                                  <div class="col-lg-4  ds clear">
+                                                        <p>
+                                                        <label for="i{{imp.username}}"  class="btn btn-success">
+                                                        <img class="img-circle" src="{% static 'images/m0.jpg' %}" width="35px" height="35px" align="">
+                                                        {{imp.truename}} 
+                                                           <muted>{{imp.clarkno}} </muted>
+                                                        <input type="radio" name="employee" value="{{imp.username}}" id="i{{imp.username}}">
+                                                           </label>
+                                                        </p>
+                                                  </div> 
+                                                  {% endfor%}
+                                                  <div class="btn-group col-lg-12 ds">
+                                                      <!-- 如果当前不是第一页，就显示【上一页】链接 -->  
+                                                      {% if curPage2 != 1 %}
+                                                      <a href="javascript:history.go(-1)"><span type="button" class="btn btn-default">上一页</span></a>                               
+                                                      {% endif %} 
+                                                      <span >第{{ curPage2 }}/{{ allPage2 }}页</span>
+                                                      <!-- 如果当前不是最后一页，就显示【下一页】链接 -->  
+                                                            {% if  curPage2 < allPage2 %}
+                                                      <a href="?curPage2={{ curPage2 }}&&allPage2={{ allPage2 }}&&pageType2=pageDown">  <span type="button" class="btn btn-default">下一页</span></a>                 
+                                                            {% endif %} </br></br>
+                                                  </div> 
+                                              </div> 
+                                        </div><!--   /12 -->
+                                    
+
+                            </div><!--   /tab-content -->
+                        </div><!--   /ml-auto mr-auto -->
+
+
+      <!-- **********************************************************************************************************************************************************
+      事项
+      *********************************************************************************************************************************************************** -->
+
+                        <div class="col-lg-12 ml-auto mr-auto">
+                            <h3>事项 </h3>
+                            <!-- Tabs with Background on Card -->
+                            <div id="2 ">
+                                <ul class="nav nav-tabs nav-tabs-neutral justify-content-center" role="tablist">
+                                    <li class="active"><a href="#home1" data-toggle="tab"  data-background-color="danger">
+                                        常用事项</a>
+                                    </li>
+                                    {% if perms.accounts.cando_admin %}
+                                    <li><a href="#profile1" data-toggle="tab">
+                                        添加常用事项并记分</a>
+                                    </li>
+                                    <li><a href={% url 'editissue' %} >
+                                        单独添加常用事项,不记分</a>
+                                    </li>
+                                    {% endif %} 
+                                </ul>
+                                <div id="2 body">
+                                    <div class="tab-content ">
+                                      <div class="tab-pane active" id="home1" role="tabpanel" aria-expanded="true">
+                                          
+                                        <!-- 方式21 input下拉框选择选择的方式   选择事项-->
+                                        <div id="21 ">
+                                              <div class="col-lg-2"><label class="control-label"></br>输入事项名</br></label>
+                                              </div>
+                                              <div class="col-lg-10">
+                                                    </br>
+                                                    <input type="text" id="search_text2" name="issname" />
+                                                    <div id="auto_div2">
+                                                </div>
+                                              </div>
+                                        </div><!-- /21-->
+
+                                        <div id="22 ">
+                                              <div class="col-lg-2"><label class="control-label"></br>或者选择</br></label>
+                                              </div>
+                                              <div class="col-lg-10">
+                                                  <!-- 方式22 radio选择的方式   选择事项 -->
+                                                {% if issues.count %}
+                                                    {% for iss in issues%} 
+                                                      <div class="col-lg-4  ds">
+                                                            <p >
+                                                            <label for="iRadios{{iss.id}}"   class="btn btn-warning">
+                                                               <span class="badge bg-theme" >{{iss.scoretype}}{{iss.score}}</span> 
+                                                                {{iss.issue}}
+                                                            <input type="radio" name="oftenissue" value="{{iss.issue}}" id="iRadios{{iss.id}}">
+                                                            </label>
+                                                            </p>
+                                                      </div>  
+                                                      {% endfor %}
+                                                  {% else %}
+                                                      <span class="btn btn-info">尚没有常用加减分的事项,请管理员添加 </span>
+                                                  {% endif %}
+
+                                                  <div class="btn-group col-lg-12 ds">
+                                                    <!-- 如果当前不是第一页，就显示【上一页】链接 -->  
+                                                      {% if curPage != 1 %}
+                                                      <a href="javascript:history.go(-1)"><span type="button" class="btn btn-default">上一页</span></a>                
+                                                      {% endif %}   
+                                                      <span >第{{ curPage }}/{{ allPage }}页</span>
+                                                             <!-- 如果当前不是最后一页，就显示【下一页】链接 -->  
+                                                            {% if  curPage < allPage %}
+                                                      <a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown">  <span type="button" class="btn btn-default">下一页</span></a>                 
+                                                            {% endif %}</br></br>
+                                                    </div> 
+                                              </div>
+                                        </div><!-- /22-->
+                                      </div><!-- /home1-->
+                                      <div class="tab-pane" id="profile1" role="tabpanel" aria-expanded="false">
+                                                <!-- 方式23 以input填写的方式  输入事项-->
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label"></br>要添加的常用事项</label>
+                                                        <div class="col-sm-10"></br>
+                                                            <input name="issue" class="form-control" type="text" placeholder="对事项进行简单描述,如:抽烟."></input></br></br>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label">分数</label>
+                                                        <div class="col-sm-10">
+                                                              
+
+                                                                      <div class=" col-sm-6 input-group">
+                                                                          <span class="input-group-addon">+</span>
+                                                                          <input  name="plus" type="text" class="form-control">
+                                                                          <span class="input-group-addon">分</span>
+                                                                      </div>
+                                                                       <h5>或者 </h5>
+                                                                      <div class=" col-sm-6 input-group">
+                                                                          <span class="input-group-addon">-</span>
+                                                                          <input  name="minus" type="text" class="form-control">
+                                                                          <span class="input-group-addon">分</span>
+                                                                      </div></br></br>
+                                                        </div>
+                                                  </div>
+                                              
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label">备注</label>
+                                                        <div class="col-sm-10">
+                                                            <textarea name="otherwords" class="form-control" rows="3" placeholder="对事项进行详细描述,如:上班时间在办公室抽烟."></textarea>
+                                                        </div>
+                                                  </div>
+                                              
+                                                  <div class="alert alert-danger">
+                                                        <b >此处添加的事项,在对上边选择的员工记分的同时,会被记录到常用事项.</b>
+                                                        
+                                                  </div>
+
+                                        </div><!-- /profile1-->
+                                    </div><!-- /tab-content -->
+                                </div><!-- /2 body -->
+                            </div><!-- /2  -->
+                        </div><!-- /ml-auto mr-auto  -->
+
+                            <div class="col-lg-10 ds white-panel">
+                            <p >
+                                <input type="submit" value="完成,提交" class="btn btn-danger">
+                             
+                            </p>
+                            </div>
+
+
+</div><!-- /col-lg-9 ds -->
+</form>
+            
+      <!-- **********************************************************************************************************************************************************
+      RIGHT SIDEBAR CONTENT
+      *********************************************************************************************************************************************************** -->                  
+                  
+                  <div class="col-lg-3 ds">
+                        <div class="alert alert-success"><b>最近事件</b> </div>
+                      
+                      {% for sc in scores%} 
+                      <div class="desc">
+                        <div class="thumb">
+                            <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                            <a href="#">{{sc.employee.truename}}</a>
+                        </div>
+                        <div class="details">
+                            <p>                                
+                                 {{sc.issue}}  {{sc.scoretype}}{{sc.score}}</br>
+                               <muted>{{sc.created_time}}</muted></br>
+                               共记分{{sc.employee.times}}次
+                            </p>
+                        </div>
+                      </div>
+                       {% endfor %}
+<a data-toggle="modal" href="{% url 'scorelist' %}">查看所有记分事件</a>
+                      
+                  </div><!-- /col-lg-3 -->
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div  class="col-lg-10 ds">
+                        <div class="col-md-12 col-lg-10 col-xl-8 ml-auto mr-auto">
+                            <h3>员工 </h3>
+                            <!-- Nav tabs -->
+                            <div class=" ">
+                                <ul class="nav nav-tabs justify-content-center" role="tablist">
+                                    <li class="active"><a href="#home" data-toggle="tab">
+                                            <i class="now-ui-icons objects_umbrella-13"></i> 选择员工
+                                        </a>
+                                    </li>
+                                    <li><a href="#profile" data-toggle="tab">
+                                            <i class="now-ui-icons shopping_cart-simple"></i> 输入员工
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class=" ">
+                                    <!-- 选择员工 -->
+                                    <div class="tab-content ">
+                                        <div class="tab-pane active" id="home" role="tabpanel" aria-expanded="true">
+                                                 {% for imp in employee%} 
+                                                  <!-- First Member -->
+                                                  <div class="col-lg-4  ds clear">
+                                                        <p>
+                                                        <label for="i{{imp.username}}"  class="btn btn-success">
+                                                        <img class="img-circle" src="{% static 'images/m0.jpg' %}" width="35px" height="35px" align="">
+                                                        {{imp.truename}} 
+                                                           <muted>{{imp.clarkno}} </muted>
+                                                        <input type="radio" name="employee" value="{{imp.username}}" id="i{{imp.username}}">
+                                                           </label>
+                                                        </p>
+                                                  </div> 
+                                                  {% endfor%}
+                                                  <div class="btn-group col-lg-12 ds">
+                                                    <!-- 如果当前不是第一页，就显示【上一页】链接 -->  
+                                                            {% if curPage2 != 1 %}
+                                                      <a href="javascript:history.go(-1)"><span type="button" class="btn btn-default">上一页</span></a>   
+                                                      <span >第{{ curPage2 }}/{{ allPage2 }}页</span>
+                                                             <!-- 如果当前不是最后一页，就显示【下一页】链接 -->  
+                                                            {% elif  curPage2 < allPage2 %}
+                                                      <a href="?curPage2={{ curPage2 }}&&allPage2={{ allPage2 }}&&pageType2=pageDown">  <span type="button" class="btn btn-default">下一页</span></a>  
+                                                            {% else %}<!-- 如果当前是最后一页 -->
+                                                                  
+                                                            {% endif %} </br></br>
+                                                    </div>  
+                                        </div>
+                                        <div class="tab-pane" id="profile" role="tabpanel" aria-expanded="false">
+                                                
+                                                        <label class="col-sm-2 col-sm-2 control-label"></br>输入员工姓名</br></label>
+                                                        <div class="col-sm-10">
+                                                    
+                                                    </br><input type="text" id="search_text" name="empname" />
+                                                    <div id="auto_div">
+                                                    </div></br></br></br></br>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-10 col-xl-8 ml-auto mr-auto">
+                            <h3>事项 </h3>
+                            <!-- Tabs with Background on Card -->
+                            <div class=" ">
+                                <ul class="nav nav-tabs nav-tabs-neutral justify-content-center" role="tablist">
+                                    <li class="active"><a href="#home1" data-toggle="tab"  data-background-color="danger">
+                                        选择常用事项</a>
+                                    </li>
+                                    <li><a href="#profile1" data-toggle="tab">
+                                        添加常用事项并记分</a>
+                                    </li>
+                                </ul>
+                                <div class=" ">
+                                    <!-- Tab panes -->
+                                    <div class="tab-content ">
+                                        <div class="tab-pane active" id="home1" role="tabpanel" aria-expanded="true">
+                                                <!-- issue SELECT SECTION 选择常用加减分事项-->
+                                                {% if issues.count %}
+                                                    {% for iss in issues%} 
+                                                      <div class="col-lg-4  ds">
+                                                            <p >
+                                                            <label for="iRadios{{iss.id}}"   class="btn btn-warning">
+                                                               <span class="badge bg-theme" >{{iss.scoretype}}{{iss.score}}</span> 
+                                                                {{iss.issue}}
+                                                            <input type="radio" name="oftenissue" value="{{iss.issue}}" id="iRadios{{iss.id}}">
+                                                            </label>
+                                                            </p>
+                                                      </div>  
+                                                      {% endfor %}
+                                                  {% else %}
+                                                      <a href={% url 'editissue' %} ><span class="btn btn-info">添加常用加减分的事项 </span></a>
+                                                  {% endif %}
+                                                  <!-- /Member -->
+
+                                                  <div class="btn-group col-lg-12 ds">
+                                                    <!-- 如果当前不是第一页，就显示【上一页】链接 -->  
+                                                            {% if curPage != 1 %}
+                                                      <a href="javascript:history.go(-1)"><span type="button" class="btn btn-default">上一页</span></a>   
+                                                      <span >第{{ curPage }}/{{ allPage }}页</span>
+                                                             <!-- 如果当前不是最后一页，就显示【下一页】链接 -->  
+                                                            {% elif  curPage < allPage %}
+                                                      <a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown">  <span type="button" class="btn btn-default">下一页</span></a>  
+                                                            {% else %}<!-- 如果当前是最后一页 -->
+                                                                 
+                                                            {% endif %} </br></br>
+                                                    </div> 
+                                        </div>
+                                        <div class="tab-pane" id="profile1" role="tabpanel" aria-expanded="false">
+                                                <!-- issue SELECT SECTION 输入常用加减分事项-->
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label"></br>要添加的常用事项</label>
+                                                        <div class="col-sm-10"></br>
+                                                            <input name="issue" class="form-control" type="text" placeholder="对事项进行简单描述,如:抽烟."></input></br></br>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label">分数</label>
+                                                        <div class="col-sm-10">
+                                                              
+
+                                                                      <div class=" col-sm-6 input-group">
+                                                                          <span class="input-group-addon">+</span>
+                                                                          <input  name="plus" type="text" class="form-control">
+                                                                          <span class="input-group-addon">分</span>
+                                                                      </div>
+                                                                       <h5>或者 </h5>
+                                                                      <div class=" col-sm-6 input-group">
+                                                                          <span class="input-group-addon">-</span>
+                                                                          <input  name="minus" type="text" class="form-control">
+                                                                          <span class="input-group-addon">分</span>
+                                                                      </div></br></br>
+                                                              
+                                                        </div>
+                                                  </div>
+                                              
+                                                  <div class="form-group">
+                                                        <label class="col-sm-2 col-sm-2 control-label">备注</label>
+                                                        <div class="col-sm-10">
+                                                            <textarea name="otherwords" class="form-control" rows="3" placeholder="对事项进行详细描述,如:上班时间在办公室抽烟."></textarea>
+                                                        </div>
+                                                  </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Tabs on plain Card -->
+                        </div>
+
+                            <div class="col-lg-10 ds white-panel">
+                            <p >
+                                <input type="submit" value="完成,提交" class="btn btn-danger">
+                             
+                            </p>
+                            </div>
+</div><!-- /col-lg-10 ds -->
+
+
+

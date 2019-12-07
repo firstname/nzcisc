@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block guid %}  - <a href="{% url 'register' %}">register </a>{% endblock %}
+  {% block title %} register {% endblock %} 
+{% block content %}
+
+        
+    <div class="well">
+        第五步:继续注册
+
+<!-- 注册表单开始 -->
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+
+ <p>您的所在地：
+                {{request.session.logined_user_province}}
+                {{request.session.logined_user_city}}
+                {{request.session.logined_user_dstrict}}
+                {{request.session.logined_user_school}}
+ </p>
+        <p>&nbsp;</p>
+<!-- 代码 开始  
+<div style="width:420px;margin:40px auto;">
+    <input type="text" id="city" />
+</div>
+
+<script type="text/javascript">
+$("#city").click(function (e) {
+    SelCity(this,e);
+});
+</script>
+  代码 结束 -->
+               
+            <table class=""> 
+            {% for field in form %} 
+                <tr>
+                <td>{{ field.label_tag }}</td> <td>{{ field }} </td><td>{{ field.errors }}</td>
+                </tr>
+                <tr><td> &nbsp &nbsp </td></tr>
+            {% endfor %}   
+            </table> 
+
+
+</div>
+
+
+
+   
+            <p class="form-actions">
+                <input type="submit" value="注册" class="btn btn-primary">
+             
+            </p>
+        </form>
+    </div>
+
+
+ <script>
+ $(function(){
+        $.ajax({
+            type:'POST',
+            usrl:'/app/ajax/get_city/',
+            data:{"parent":0,"level":1},
+            success:function(data){
+                var all_ps=data['dict_city']
+<!--这里取得结果后，然后遍历出结果填充在对应的html页面中-->
+                for(var i=0;i<all_ps.length;i++){
+                    var $html=String.format('<option value="{0}">{1}</option>',all_ps[i][0],all_ps[i][1])
+                    $('#shengcode').append($html)
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("error");
+                    },
+            dataType: 'json'
+        });
+        $('#shengcode').change(function(){
+            var parent = $('#shengcode').val()
+            $.ajax({
+            type:'POST',
+            url:'/app/ajax/get_city/',
+            data:{"parent":parent,"level":2},
+            success:function(data){
+                var all_ps=data['dict_city']
+<!--在填充之前将后面的几个下拉菜单制空-->
+                var $shicode = $('#shicode').empty();
+                $shicode.append('<option selected value="">请选择</option>')
+                var $xiancode = $('#xiancode').empty();
+                $xiancode.append('<option selected value="">请选择</option>')
+                for(var i=0;i<all_ps.length;i++){
+                    var $html=String.format('<option value="{0}">{1}</option>',all_ps[i][0],all_ps[i][1])
+                    $('#shicode').append($html)
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("error");
+                    },
+            dataType: 'json'
+        });
+        })
+
+         $('#shicode').change(function(){
+            var parent = $('#shicode').val()
+            $.ajax({
+            type:'POST',
+            url:'/app/ajax/get_city/',
+            data:{"parent":parent,"level":3},
+            success:function(data){
+                var all_ps=data['dict_city']
+                var $xiancode = $('#xiancode').empty();
+                $xiancode.append('<option selected value="">请选择</option>')
+                for(var i=0;i<all_ps.length;i++){
+                    var $html=String.format('<option value="{0}">{1}</option>',all_ps[i][0],all_ps[i][1])
+                    $('#xiancode').append($html)
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("error");
+                    },
+            dataType: 'json'
+        });
+        })
+    })
+ </script>
+
+{% endblock %}
