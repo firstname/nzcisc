@@ -1,0 +1,75 @@
+{% extends 'base0.html' %}
+{% load staticfiles %}
+    {% block content %}
+
+    <!--about-->
+    <div class="about" id="about">
+        <div class="container">
+            <div class="title">
+                <h3>Data Analysis</h3>
+                <h4>File name:{{ post.file_name }}</h4> <p>NO. {{ post.pk }}; 上传日期:{{ post.created_date }} </p>
+            </div>
+            
+               
+            <div class="about-grids"> 
+                <div class="col-md-6 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+                 <h4>自动分析 </h4>
+                    <p>对于数据格式和列 的命名有固定格式要求,请确保你的数据符合标准格式,将对数据自动分析并输出全部结果.
+                    <a href="/#services">    查看数据格式要求</a></p>
+                    <p>1.分数格式的数据 <a href="{% url 'down' p1='score'  %}">Download template</a></p>
+                    <ul>
+                    {% if 'all_score' in post.if_anal %}
+                        <li><a href="{% url 'result_de' pp=post.pk ana='all_score'%}">已经分析,查看结果</a>
+                        <br/>    generated date:{{ post.anal_date }}</li>
+                        <li><a href="{% url 'choose_var' pp=post.pk ana='all_score'%}">重新计算</a></li>
+                    {% else   %}
+                        <li><a href="{% url 'auto_analysis' pp=post.pk ana='all_score'%}">尚未分析,进行分析</a></li>
+                     {% endif  %}
+                    </ul> 
+                    <p>2.选项格式的数据<a href="{% url 'down' p1='score'  %}">Download template</a></p>
+                    <ul>
+                        <li><a href="{% url 'auto_analysis' pp=post.pk ana='all_choice'%}">尚未分析,进行分析</a></li>
+                    </ul> 
+                    <p>3.分数+选项格式的数据<a href="{% url 'down' p1='score'  %}">Download template</a></p>
+                    <ul>        
+                        <li><a href="{% url 'auto_analysis' pp=post.pk ana='all'%}">尚未分析,进行分析</a></li>
+                            
+                    </ul>  
+                </div> 
+
+                <div class="col-md-6 about-info  wow fadeInLeft animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
+                    <h4>单项分析 </h4>
+                    <p>可以对数据中任意一列计算相应的指标,对于数据里面列的命名没有严格要求.当前版本一次可以计算一列数据,后续版本将支持一次计算多列数据.</p>
+                    <p>1.计算标准分数</p>
+                    <ul>
+                    {% if 'std' in post.if_anal %}
+                        <li><a href="{% url 'result_de' pp=post.pk ana='std'%}">已经分析,查看结果</a>
+                        <br/>    generated date:{{ post.anal_date }}</li>
+                        <li><a href="{% url 'choose_var' pp=post.pk ana='std'%}">重新选择数据列计算标准分数</a></li>
+                        
+                    {% else   %}
+                        <li><a href="{% url 'choose_var' pp=post.pk ana='std'%}">尚未分析,进行分析</a></li>
+                    {% endif  %}
+                    
+                    </ul>
+
+                    <p>2.计算平均分\标准差......</p>
+                    <ul>
+                    {% if 'des' in post.if_anal %}
+                        <li><a href="{% url 'result_de' pp=post.pk ana='des'%}">已经分析,查看结果</a>
+                        <br/>        generated date:{{ post.anal_date }}</li>
+                        <li><a href="{% url 'choose_var' pp=post.pk ana='des'%}">重新选择数据列计算平均分\标准差</a></li>
+                        
+                    {% else   %}
+                        <li><a href="{% url 'choose_var' pp=post.pk ana='des'%}">尚未分析,进行分析</a></li>
+                    {% endif  %}
+                    </ul>
+                    
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+            
+        </div>
+    </div>
+
+  {% endblock content %}

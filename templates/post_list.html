@@ -1,0 +1,43 @@
+{% extends 'base0.html' %}
+{% load staticfiles %}
+    {% block content %}
+
+    <!--about-->
+    <div class="about" id="about">
+        <div class="container">
+            <div class="title">
+                <h3>File list</h3>
+                <p>All files uploaded are listed out below. Choose one to analysis or you can <a href="/up/">upload a new file</a>.</p>
+            </div>
+            
+            <div class="about-grids2">  
+              {% for post in posts %}           
+                <div class="col-md-6 about-info  wow fadeInLeft animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
+                    <h4>{{ post.file_name }} </h4>
+                    <p>NO. {{ post.pk }} </p>
+                    <p>上传日期:{{ post.created_date }} </p>
+                    <ul>
+                        {% if post.if_anal == '' %}
+                        <li><a href="{% url 'pre_analysis' pp=post.pk %}">进行分析</a></li>
+                        {% else  %}
+                        <li>已经分析过    generated date:{{ post.anal_date }}</li>
+                        
+                        <li><a href="{% url 'pre_analysis' pp=post.pk %}">查看结果/重新分析</a></li>
+                        {% endif  %}
+                        <li><a href="{% url 'down_file' pp=post.pk %}">下载原文件</a></li>
+                        <li><a href="{% url 'dele_post' pp=post.pk %}">删除文件</a></li>
+                        {{ upfiles }}
+                        
+                    </ul>
+                </div>
+            {% endfor %}
+<!--                 <div class="col-md-6 about-info  wow fadeInRight animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
+   <img src="{% static 'images/img1.jpg' %}" alt=""/>
+               </div> -->
+                <div class="clearfix"> </div>
+            </div>
+            
+        </div>
+    </div>
+
+  {% endblock content %}

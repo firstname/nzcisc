@@ -1,0 +1,47 @@
+{% extends 'base0.html' %}
+{% load staticfiles %}
+    {% block content %}
+
+<!--contact-->
+    <div class="contact" id="contact">
+        <div class="container">
+            <div class="title">
+                <h3>Upload Files</h3>
+                <p>Please choose the files you want to analysis in your disk, and upload it, then you can analysis it. If there have been already some files uploaded by you before, you can <a href='/list/'>choose one from the list</a> to analysis. </p>
+            </div>
+            <div class="contact-grids">
+                <div class="col-md-4 address wow fadeInLeft animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
+                 <h4>File format recommendation</h4>
+                    <p class="cnt-p">What is the perfect form of the data file depends on what would to be kown by the analysis result. Here are some often used file forms.</p>
+                    <p>Exam score data file</p>
+                    <p>File on test items</p>
+                    <p>Questionare choice data file</p>
+                    <p>File about participants</p>
+                    <p><a href="http://127.0.0.1:8000/#services">read more</a></p>  
+                </div>
+
+                <div class="col-md-8 contact-form wow fadeInRight animated" data-wow-delay="0.5s" style="visibility: visible; -webkit-animation-delay: 0.5s;">
+                    <h4>File upload</h4>
+                    <form method="post" enctype="multipart/form-data" >
+                             {% csrf_token %}
+
+                        <div class="col-md-8 contact-form-info">
+                        
+                            {{uf.as_p}}
+                            
+                        </div>
+                        
+                        
+                        <input type="submit" value="Submit">
+                    </form>
+                    <br/><br/>
+                </div>
+
+                <div class="clearfix"> </div>   
+            </div>
+        </div>
+    </div>
+    <!--//contact-->
+
+
+ {% endblock content %}

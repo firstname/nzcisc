@@ -1,0 +1,64 @@
+{% extends 'base0.html' %}
+{% load staticfiles %}
+    {% block content %}
+   
+
+    <!--services-->
+    <div class="services" >
+        <div class="container">         
+            <div class="title">
+                <h3>File "{{ post.file_name }}"" details</h3>
+                <p>上传日期: {{ post.created_date|linebreaks }} </p>
+
+            </div>
+            <div class="service-grids">
+                
+               <div class="col-md-12 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+                   <div class="col-md-12 contact-form-info">
+                   <div class="srvc-img">
+                       <img src="{% static 'images/icon5.png' %}" alt=""/>
+                   </div>
+                   <h5>变量</h5>
+                   </div>
+
+
+               </div>
+                 
+               <div class="col-md-12 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+                {% for var in vars %} 
+                   <div class="col-md-12 contact-form-info">
+                   <p>变量{{ forloop.counter }}: {{ var }} <a href="{%url 'vars_de' pp=post.pk p1=var%}"> 查看{{ var }} </a></p>
+                   </div>
+                  <p></p>
+                {% endfor  %} 
+               </div>
+ 
+                
+                 <div class="col-md-12 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+                    <div class="srvc-img">
+                        <img src="{% static 'images/icon6.png' %}" alt=""/>
+                    </div>
+                    <h5>More actions:</h5>
+
+                    <ul>
+                        <li><a href="" onClick="javascript :history.back(-1);">后退</a></li>
+                        {% if post.if_anal == 'False'  %}
+                        
+                        <li><a href="{% url 'pre_analysis' pp=post.pk %}">进行分析</a></li>
+                        {% else  %}
+                        <li><a href="{% url 'result_de' pp=post.pk %}">查看结果</a>    generated date:{{ post.anal_date }}</li>
+                        <li><a href="{% url 'split_file' pp=post.pk  %}">重新分组</a></li>
+                        <li><a href="{% url 'pre_analysis' pp=post.pk %}">再次分析</a></li>
+                        {% endif  %}
+                        
+                    </ul>
+                </div>
+                <div class="clearfix"> </div>               
+            </div>
+        </div>
+    </div>
+    <!--//services-->
+
+        
+    
+  {% endblock content %}

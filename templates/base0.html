@@ -1,0 +1,175 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>EDAS</title>
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+<link href="{% static 'css/bootstrap.css' %}" type="text/css" rel="stylesheet" media="all">
+<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="all">
+<!-- Custom Theme files -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="EDAS,Score analysis,Exam Data Analysis System,The fantastic solutin for score analysis" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //Custom Theme files -->
+<!-- js -->
+<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'js/modernizr.custom.js' %}"></script>
+<!-- //js -->	
+<!-- start-smoth-scrolling-->
+<script type="text/javascript" src="{% static 'js/move-top.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>	
+<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+			});
+		});
+</script>
+<!--//end-smoth-scrolling-->
+<!--animate-->
+<link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css" media="all">
+<script src="{% static 'js/wow.min.js' %}"></script>
+	<script>
+		 new WOW().init();
+	</script>
+<!--//end-animate-->
+</head>
+<body>
+    <!--banner left-->
+<!--     <div class="banner02">        
+    header
+		<div class="banner-text02">
+			<div class="logo">	
+				<a href="/"><img src="{% static 'images/icon2.png' %}" alt=""/><h1>EDAS</h1></a>
+			</div> 
+			<div class="top-nav">
+            <ul class="nav1 cl-effect-1">
+                <li><a href="/">Home</a></li>
+                <li><a href="#about" class="scroll">Guidance</a></li>
+                <li><a href="#services" class="scroll">Templates</a></li>
+                <li><a href="#products" class="scroll">Products</a></li>
+                <li><a href="#team" class="scroll">About</a></li>
+                <li><a href="#contact" class="scroll">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</div> -->
+
+
+    <!--banner right-->
+	<div class="banner">		
+		<!--header-->
+		<div class="banner-text">
+			<div class="logo">	
+				<a href="/"><img src="{% static 'images/icon2.png' %}" alt=""/><h1>EDAS</h1></a>
+			</div> 
+			<div class="top-nav">
+				<ul class="nav1 cl-effect-1">
+                    <li><a href="/">Home</a></li>
+                    <!-- <li><a href="/#about" class="scroll">Guidance</a></li>
+                    <li><a href="/#services" class="scroll">Templates</a></li>
+                    <li><a href="/#products" class="scroll">Products</a></li>
+                    <li><a href="/#team" class="scroll">About</a></li>
+                    <li><a href="/#contact" class="scroll">Contact</a></li>
+                    					<li>Quick Link :</li> -->
+					<li><a href="/list/">Files >></a></li>
+					<li><a href="/up/">Upload >></a></li>
+					<br/><br/>
+					<li><a href="" onClick="javascript :history.back(-1);"><<<后退</a></li>
+				</ul>	
+
+				<!-- menu
+				<ul class="nav1 cl-effect-1">
+					<li><a href="/">Home</a></li>
+					<li><a href="#about" class="scroll">About</a></li>
+					<li><a href="#services" class="scroll">Services</a></li>
+					<li><a href="#products" class="scroll">Products</a></li>
+					<li><a href="#team" class="scroll">Our Team</a></li>
+					<li><a href="#contact" class="scroll">Contact</a></li>
+				</ul>
+				-->
+			</div>
+
+		</div>
+		<!-- banner Slider starts Here -->
+		<script src="{% static 'js/responsiveslides.min.js' %}"></script>
+		<script>
+			// You can also use "$(window).load(function() {"
+				$(function () {
+				// Slideshow 3
+					$("#slider3").responsiveSlides({
+					auto: true,
+					pager:false,
+					nav:true,
+					speed: 500,
+					namespace: "callbacks",
+					before: function () {
+					$('.events').append("<li>before event fired.</li>");
+					},
+					after: function () {
+						$('.events').append("<li>after event fired.</li>");
+					}
+				});	
+			});
+		</script>
+		<!--//End-slider-script -->
+		<div  id="top" class="callbacks_container">
+			<ul class="rslides" id="slider3">
+				<li>					
+					<div class="banner2">						
+					</div>
+				</li>
+				<li>					
+					<div class="banner1">						
+					</div>
+				</li>								
+			</ul>
+		</div>
+	</div>
+	<!--//banner-->
+
+
+
+{% block content %}
+
+{% endblock %}
+
+
+
+
+
+
+	<!--footer-->
+	<div class="footer">
+		<div class="container">			
+				<p class="wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">Copyright &copy; 2015.<a href="http://127.0.0.1:8000/" target="_blank" title="EDAS">EDAS</a> -  All rights reserved. </p>
+			<div class="clearfix"> </div>
+		</div>	
+	</div>
+	<!--//footer-->
+	<!--smooth-scrolling-of-move-up-->
+	<script type="text/javascript">
+			$(document).ready(function() {
+				/*
+				var defaults = {
+					containerID: 'toTop', // fading element id
+					containerHoverID: 'toTopHover', // fading element hover id
+					scrollSpeed: 1200,
+					easingType: 'linear' 
+				};
+				*/
+				
+				$().UItoTop({ easingType: 'easeOutQuart' });
+				
+			});
+		</script>
+		<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+	<!--//smooth-scrolling-of-move-up-->
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'js/bootstrap.js' %}"> </script>
+</body>
+</html>

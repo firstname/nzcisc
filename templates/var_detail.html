@@ -1,0 +1,48 @@
+{% extends 'base0.html' %}
+{% load staticfiles %}
+    {% block content %}
+   
+
+    <!--services-->
+    <div class="services" >
+        <div class="container">         
+            <div class="title">
+                <h3>File "{{ post.file_name }}"" details</h3>
+                <p>上传日期: {{ post.created_date|linebreaks }} </p>
+
+            </div>
+            <div class="service-grids">
+                
+               <div class="col-md-12 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+
+                   <div class="col-md-12 contact-form-info">
+                   <div class="srvc-img">
+                       <img src="{% static 'images/icon5.png' %}" alt=""/>
+                   </div>
+                   <h5>变量{{ var }}的值</h5>
+                   </div>
+
+
+               </div>
+                 
+               <div class="col-md-12 srvc-grids-info wow bounceIn animated" data-wow-delay=".5s" style="visibility: visible; -webkit-animation-delay: .5s;">
+                
+                   <div class="col-md-12 contact-form-info">
+                   <p> 变量值| 数量</p>
+                   <p> {{ cnts |linebreaks}} </p>
+                   </div>
+ 
+                    
+               
+               </div>
+ 
+
+                <div class="clearfix"> </div>               
+            </div>
+        </div>
+    </div>
+    <!--//services-->
+
+        
+    
+  {% endblock content %}
