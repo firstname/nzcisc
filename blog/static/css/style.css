@@ -290,6 +290,15 @@ section.top-bar ul.social-icons1 li a i.fa.fa-google-plus:hover {
   left: 0;
   width: 100%;
 }
+
+.carousel-text {
+  width: 600px;
+  margin: 0 auto;
+  position: relative; /*脱离文档流*/
+  top: 40%; /*偏移*/
+  color: #fff;
+  font-weight: 800;
+}
 /*-- /Banner Section --*/
 /* RESPONSIVE CSS
 -------------------------------------------------- */
@@ -326,7 +335,7 @@ section.top-bar ul.social-icons1 li a i.fa.fa-google-plus:hover {
 	overflow: hidden;
 	text-indent: 100%;
 	white-space: nowrap;
-	background:rgba(62, 58, 57, 0.8) url('./static/images/cd-top-arrow.svg') no-repeat center 50%;
+	background:rgba(62, 58, 57, 0.8) url('../images/cd-top-arrow.svg') no-repeat center 50%;
 	background-size: 75%;
 	visibility: hidden;
   opacity: 0;
@@ -400,7 +409,7 @@ section.about-us .about-info p {
 /*-- /About Us --*/
 /*-- Our Services --*/
 section.our-services {
-	background:url('./static/images/service.jpg') no-repeat;
+	background:url('../images/service.jpg') no-repeat;
 
     background-attachment: fixed;
     background-position: center;
@@ -481,7 +490,7 @@ section.our-info .info-pics .col-lg-2.col-md-2.col-sm-2.info-images {
 /*-- /Our Information --*/
 /*-- Our Gallery --*/
 section.our-gallery {
-	background:url('./static/images/service.jpg') no-repeat;
+	background:url('../images/service.jpg') no-repeat;
     background-attachment: fixed;
     background-position: center;
     background-size:100% 100%;
@@ -588,7 +597,7 @@ section.map iframe.googlemaps {
 /*-- /Google Map --*/
 /*-- Contact Section --*/
 section.our-contacts {
-	background:url('./static/images/contact.jpg') no-repeat;
+	background:url('../images/contact.jpg') no-repeat;
     background-attachment: fixed;
     background-position: center;
     background-size:100% 100%;
@@ -683,7 +692,7 @@ button.btn-outline1 {
 /*-- /Contact Section --*/
 /*-- Footer --*/
 section.footer {
-	background:url('./static/images/footer.png') repeat;
+	background:url('../images/footer.png') repeat;
     background-attachment: fixed;
     background-position: center;
 padding: 50px 0 30px 0;
