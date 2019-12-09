@@ -292,9 +292,10 @@ section.top-bar ul.social-icons1 li a i.fa.fa-google-plus:hover {
 }
 
 .carousel-text {
-  width: 600px;
-  margin: 0 auto;
+  width: 400px;
+  padding: 40px;
   position: relative; /*脱离文档流*/
+  left:20%;
   top: 40%; /*偏移*/
   color: #fff;
   font-weight: 800;
