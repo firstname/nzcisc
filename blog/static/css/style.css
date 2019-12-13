@@ -182,7 +182,7 @@ section.top-bar ul.social-icons1 li a i.fa.fa-google-plus:hover {
 .nav>li>a {
 	font-size:20px;
 	font-weight:300;
-	padding:10px 45px;
+	padding:10px 15px;
 	line-height:30px;
 	color:#fff!important;
 }
@@ -201,7 +201,7 @@ section.top-bar ul.social-icons1 li a i.fa.fa-google-plus:hover {
   position: absolute;
   top: 0;
   right: 0;
-  left: 0;
+  left: 40%;
   z-index: 20;
 }
 .navbar-wrapper > .container {
